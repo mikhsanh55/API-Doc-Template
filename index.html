@@ -8,7 +8,7 @@
 <html class="no-js" lang="en">
 <head>
     <meta charset="utf-8">
-    <title>API - Documentation</title>
+    <title>API SMAN 5 - Documentation</title>
     <meta name="description" content="">
     <meta name="author" content="ticlekiwi">
 
@@ -35,11 +35,14 @@
             <li class="scroll-to-link active" data-target="get-started">
                 <a>GET STARTED</a>
             </li>
-            <li class="scroll-to-link" data-target="get-characters">
-                <a>Get Characters</a>
+            <li class="scroll-to-link" data-target="tugas">
+                <a>Get List Tugas</a>
             </li>
-            <li class="scroll-to-link" data-target="errors">
-                <a>Errors</a>
+            <li class="scroll-to-link" data-target="detail-tugas">
+                <a>Get Detail Tugas</a>
+            </li>
+            <li class="scroll-to-link" data-target="insert-tugas">
+                <a>Insert Assignment Tugas</a>
             </li>
         </ul>
     </div>
@@ -52,98 +55,74 @@
             <pre>
     API Endpoint
 
-        https://api.westeros.com/
+        https://api.lms-sman5bdg.online/
                 </pre>
             <p>
                 The Westeros API provides programmatic access to read Game of Thrones data. Retrieve a character, provide an oauth connexion, retrieve a familly, filter them, etc.
             </p>
             <p>
-                To use this API, you need an <strong>API key</strong>. Please contact us at <a href="mailto:jon.snow@nightswatch.wes">jon.snow@nightswatch.wes</a> to get your own API key.
+                To use this API, you need an <strong>API key</strong>. Please contact us at <a href="mailto:ikhsanhamidan13@gmail.com">ikhsanhamidan13@gmail.com</a> to get your own API key. with subject <mark>Request API</mark>
             </p>
         </div>
-        <div class="overflow-hidden content-section" id="content-get-characters">
-            <h2 id="get-characters">get characters</h2>
+        <div class="overflow-hidden content-section" id="content-tugas">
+            <h2 id="tugas">tugas</h2>
             <pre><code class="bash">
-# Here is a curl example
-curl \
--X POST http://api.westeros.com/character/get \
--F 'secret_key=your_api_key' \
--F 'house=Stark,Bolton' \
--F 'offset=0' \
--F 'limit=50'
+# Here is a curl example <strong>JS XMLHttp</strong>
+var http = new XMLHttpRequest()
+
+http.open('GET', 'https://api.lms-sman5bdg.online/tugas/get-list-tugas')
+http.setRequestHeader('Authorization', 'bearer YOUR_TOKEN')
+http.overrideMimeType('application/json')
+
+http.onload = function() {
+  console.log(http.responseText)
+}
+
+http.onerror = function() {
+  console.error(http.responseText)
+}
+
+http.send(null)
                 </code></pre>
             <p>
-                To get characters you need to make a POST call to the following url :<br>
-                <code class="higlighted">http://api.westeros.com/character/get</code>
+                To get list of tugas siswa, you need to GET call to the following URL :<br>
+                <code class="higlighted">http://api.lms-sman5bdg.online/tugas/get-list-tugas</code>
             </p>
             <br>
             <pre><code class="json">
-Result example :
+Result example 200:
 
 {
-  query:{
-    offset: 0,
-    limit: 50,
-    house: [
-      "Stark",
-      "Bolton"
-    ],
-  }
-  result: [
+  status: true,
+  data: [
     {
-      id: 1,
-      first_name: "Jon",
-      last_name: "Snow",
-      alive: true,
-      house: "Stark",
-      gender: "m",
-      age: 14,
-      location: "Winterfell"
+      id: 23,
+      keterangan: 'Kerjakan cepat',
+      end_date: '2020-10-10',
+      nama_guru: 'Sumiati S.Pd',
+      nama_mapel: 'Bahasa Indonesia'
     },
     {
-      id: 2,
-      first_name: "Eddard",
-      last_name: "Stark",
-      alive: false,
-      house: "Stark",
-      gender: "m",
-      age: 35,
-      location: 'Winterfell'
-    },
-    {
-      id: 3,
-      first_name: "Catelyn",
-      last_name: "Stark",
-      alive: false,
-      house: "Stark",
-      gender: "f",
-      age: 33,
-      location: "Winterfell"
-    },
-    {
-      id: 4,
-      first_name: "Roose",
-      last_name: "Bolton",
-      alive: false,
-      house: "Bolton",
-      gender: "m",
-      age: 40,
-      location: "Dreadfort"
-    },
-    {
-      id: 5,
-      first_name: "Ramsay",
-      last_name: "Snow",
-      alive: false,
-      house: "Bolton",
-      gender: "m",
-      age: 15,
-      location: "Dreadfort"
-    },
+      id: 34,
+      keterangan: 'Besok kumpulkan',
+      end_date: '2020-10-11',
+      nama_guru: 'Sumiati S.Pd',
+      nama_mapel: 'Bahasa Inggris'
+    }
   ]
 }
                 </code></pre>
-            <h4>QUERY PARAMETERS</h4>
+                <br>
+                <pre>
+                  <code class="json">
+Result Example 500
+{
+  status: false,
+  msg: 'Terdapat error'
+}
+                  </code>
+                </pre>
+            <h4><mark>GET</mark> QUERY PARAMETERS</h4>
             <table>
                 <thead>
                 <tr>
@@ -154,91 +133,194 @@ Result example :
                 </thead>
                 <tbody>
                 <tr>
-                    <td>secret_key</td>
-                    <td>String</td>
-                    <td>Your API key.</td>
-                </tr>
-                <tr>
-                    <td>search</td>
-                    <td>String</td>
-                    <td>(optional) A search word to find character by name.</td>
-                </tr>
-                <tr>
-                    <td>house</td>
-                    <td>String</td>
                     <td>
-                        (optional) a string array of houses:
+                      <mark>Header</mark>
+                       Authorization (mandatory)
                     </td>
-                </tr>
-                <tr>
-                    <td>alive</td>
-                    <td>Boolean</td>
-                    <td>
-                        (optional) a boolean to filter alived characters
-                    </td>
-                </tr>
-                <tr>
-                    <td>gender</td>
                     <td>String</td>
-                    <td>
-                        (optional) a string to filter character by gender:<br>
-                        m: male<br>
-                        f: female
-                    </td>
-                </tr>
-                <tr>
-                    <td>offset</td>
-                    <td>Integer</td>
-                    <td>(optional - default: 0) A cursor for use in pagination. Pagination starts offset the specified offset.</td>
-                </tr>
-                <tr>
-                    <td>limit</td>
-                    <td>Integer</td>
-                    <td>(optional - default: 10) A limit on the number of objects to be returned, between 1 and 100.</td>
+                    <td>bearer Your TOKEN.</td>
                 </tr>
                 </tbody>
             </table>
         </div>
-        <div class="overflow-hidden content-section" id="content-errors">
-            <h2 id="errors">Errors</h2>
+        <!-- Detail Tugas -->
+        <div class="overflow-hidden content-section" id="content-detail-tugas">
+            <h2 id="detail-tugas">Detail Tugas</h2>
+            <pre><code class="bash">
+# Here is a curl example <strong>JS XMLHttp</strong>
+var http = new XMLHttpRequest(),
+    formData = new FormData()
+
+http.open('POST', 'https://api.lms-sman5bdg.online/tugas/get-detail-tugas')
+http.setRequestHeader('Authorization', 'bearer YOUR_TOKEN')
+http.overrideMimeType('application/json')
+
+formData.append('tugas', this.idTugas)
+
+http.onload = function() {
+  console.log(http.responseText)
+}
+
+http.onerror = function() {
+  console.error(http.responseText)
+}
+
+http.send(formData)
+                </code></pre>
             <p>
-                The Westeros API uses the following error codes:
+                To get detail of tugas siswa, you need to POST call to the following URL :<br>
+                <code class="higlighted">http://api.lms-sman5bdg.online/tugas/get-detail-tugas</code>
             </p>
+            <br>
+            <pre><code class="json">
+Result example 200:
+
+{
+  status: true,
+  data: [
+    detail: {
+      id: 23,
+      keterangan: 'Ayo',
+      end_date: '2020-10-10 10:00:00',
+      nama_guru: 'Sumiati S.Pd',
+      nama_mapel: 'Matematika'
+    },
+    files: [
+      {
+        id: 1,
+        id_tugas: 23,
+        format: 'pdf',
+        path: 'https://api.lms-sman5bdg.online/storage/tugas/attachment/file 1.pdf'
+      }
+    ]
+  ]
+}
+                </code></pre>
+                <br>
+                <pre>
+                  <code class="json">
+Result Example 500
+{
+  status: false,
+  msg: 'Terdapat error'
+}
+                  </code>
+                </pre>
+            <h4><mark>POST</mark> QUERY PARAMETERS</h4>
             <table>
                 <thead>
                 <tr>
-                    <th>Error Code</th>
-                    <th>Meaning</th>
+                    <th>Field</th>
+                    <th>Type</th>
+                    <th>Description</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr>
-                    <td>X000</td>
                     <td>
-                        Some parameters are missing. This error appears when you don't pass every mandatory parameters.
+                      <mark>Header</mark>
+                       Authorization (mandatory)
                     </td>
+                    <td>String</td>
+                    <td>bearer Your TOKEN.</td>
                 </tr>
                 <tr>
-                    <td>X001</td>
-                    <td>
-                        Unknown or unvalid <code class="higlighted">secret_key</code>. This error appears if you use an unknow API key or if your API key expired.
-                    </td>
-                </tr>
-                <tr>
-                    <td>X002</td>
-                    <td>
-                        Unvalid <code class="higlighted">secret_key</code> for this domain. This error appears if you use an  API key non specified for your domain. Developper or Universal API keys doesn't have domain checker.
-                    </td>
-                </tr>
-                <tr>
-                    <td>X003</td>
-                    <td>
-                        Unknown or unvalid user <code class="higlighted">token</code>. This error appears if you use an unknow user <code class="higlighted">token</code> or if the user <code class="higlighted">token</code> expired.
-                    </td>
+                  <td>
+                    <mark>Body</mark>
+                    tugas (mandatory)
+                  </td>
+                  <td>Integer</td>
+                  <td>Id tugas</td>
                 </tr>
                 </tbody>
             </table>
         </div>
+        <!-- Insert Tugas -->
+        <div class="overflow-hidden content-section" id="content-insert-tugas">
+            <h2 id="insert-tugas">Insert Assignment Tugas (as Siswa)</h2>
+            <pre><code class="bash">
+# Here is a curl example <strong>JS XMLHttp</strong>
+var http = new XMLHttpRequest(),
+    formData = new FormData()
+
+http.open('POST', 'https://api.lms-sman5bdg.online/tugas/insert-assignment')
+http.setRequestHeader('Authorization', 'bearer YOUR_TOKEN')
+http.overrideMimeType('application/json')
+
+formData.append('tugas', this.idTugas)
+formData.append('file', this.FileInput.files[0])
+
+http.onload = function() {
+  console.log(http.responseText)
+}
+
+http.onerror = function() {
+  console.error(http.responseText)
+}
+
+http.send(formData)
+                </code></pre>
+            <p>
+                To insert file tugas siswa, you need to POST call to the following URL :<br>
+                <code class="higlighted">http://api.lms-sman5bdg.online/tugas/insert-assignment</code>
+            </p>
+            <br>
+            <pre><code class="json">
+Result example 200:
+
+{
+  status: true,
+  msg: 'File Tugas berhasil diupload'
+}
+                </code></pre>
+                <br>
+                <pre>
+                  <code class="json">
+Result Example 500
+{
+  status: false,
+  msg: 'Terdapat error'
+}
+                  </code>
+                </pre>
+            <h4><mark>POST</mark> QUERY PARAMETERS</h4>
+            <table>
+                <thead>
+                <tr>
+                    <th>Field</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                      <mark>Header</mark>
+                       Authorization (mandatory)
+                    </td>
+                    <td>String</td>
+                    <td>bearer Your TOKEN.</td>
+                </tr>
+                <tr>
+                  <td>
+                    <mark>Body</mark>
+                    tugas (mandatory)
+                  </td>
+                  <td>Integer</td>
+                  <td>Id tugas</td>
+                </tr>
+                <tr>
+                  <td>
+                    <mark>Body</mark>
+                    file (mandatory)
+                  </td>
+                  <td>Blog / File Object JS</td>
+                  <td>Input File to upload</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+       
     </div>
     <div class="content-code"></div>
 </div>
